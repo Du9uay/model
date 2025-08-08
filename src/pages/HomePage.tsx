@@ -173,6 +173,23 @@ const HomePage: React.FC = () => {
           </motion.p>
         </motion.div>
 
+        {/* 环境检测信息 */}
+        <motion.div
+          className="mb-4 text-center text-xs text-gray-400"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div>当前环境: {window.location.hostname}</div>
+          <div>
+            {window.location.hostname.includes('vercel.app') 
+              ? '✅ Vercel环境 - 支持完整3D模型' 
+              : window.location.hostname.includes('github.io')
+              ? '⚠️ GitHub Pages - 使用简化模型'
+              : '🖥️ 本地开发环境'}
+          </div>
+        </motion.div>
+
         {/* 3D 模型展示区域 */}
         <motion.div
           className="mb-16 flex justify-center"
