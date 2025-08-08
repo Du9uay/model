@@ -17,8 +17,10 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
   const [progress, setProgress] = useState(0);
   const [useFallback, setUseFallback] = useState(false);
   
-  // 检测是否在GitHub Pages上
+  // 检测是否在GitHub Pages上（不支持大文件）
   const isGitHubPages = window.location.hostname.includes('github.io');
+  // 检测是否在Vercel上（支持大文件）
+  const isVercel = window.location.hostname.includes('vercel.app');
 
   useEffect(() => {
     // 如果在GitHub Pages上，不执行OBJ加载逻辑
@@ -281,7 +283,7 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
     };
   }, [isGitHubPages]);
 
-  // 如果在GitHub Pages上，使用备用模型
+  // 如果在GitHub Pages上，使用备用模型（Vercel支持真实模型）
   if (isGitHubPages) {
     return <FallbackModel className={className} />;
   }

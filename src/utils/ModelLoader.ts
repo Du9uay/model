@@ -1,20 +1,29 @@
 // 根据环境选择模型加载策略
 export function getModelPath(): { obj: string; mtl: string } {
-  const isProduction = process.env.NODE_ENV === 'production';
-  const isGitHubPages = window.location.hostname.includes('github.io');
+  const hostname = window.location.hostname;
+  const isGitHubPages = hostname.includes('github.io');
+  const isVercel = hostname.includes('vercel.app') || hostname.includes('.vercel.app');
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
   
-  if (isGitHubPages) {
-    // GitHub Pages环境：使用CDN或较小的模型
-    console.log('GitHub Pages detected, using alternative model source');
-    // 可以将模型上传到CDN服务（如jsDelivr、unpkg等）
-    // 或使用GitHub Releases作为存储
+  // Vercel环境可以直接加载大文件
+  if (isVercel || isLocalhost) {
+    console.log('Vercel/Local environment detected, loading full model');
     return {
-      obj: '/Ux730415/JH-总装.obj',  // 仍然尝试加载，但可能会失败
+      obj: '/Ux730415/JH-总装.obj',
       mtl: '/Ux730415/JH-总装.mtl'
     };
   }
   
-  // 本地开发环境
+  // GitHub Pages环境无法加载Git LFS文件
+  if (isGitHubPages) {
+    console.log('GitHub Pages detected, model loading will fail');
+    return {
+      obj: '/Ux730415/JH-总装.obj',  // 会失败，但保持路径一致性
+      mtl: '/Ux730415/JH-总装.mtl'
+    };
+  }
+  
+  // 默认路径
   return {
     obj: '/Ux730415/JH-总装.obj',
     mtl: '/Ux730415/JH-总装.mtl'

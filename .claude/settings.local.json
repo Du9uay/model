@@ -45,7 +45,9 @@
       "Bash(git lfs:*)",
       "Bash(touch:*)",
       "Bash(npm ci:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git tag:*)",
+      "Bash(gh release create:*)"
     ],
     "deny": []
   },
