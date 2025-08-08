@@ -4,6 +4,7 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { LargeOBJLoader } from '../utils/LargeOBJLoader';
 import { getModelPath, handleModelLoadError } from '../utils/ModelLoader';
+import FallbackModel from './FallbackModel';
 
 interface OBJModelViewerProps {
   className?: string;
@@ -14,8 +15,14 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  const [useFallback, setUseFallback] = useState(false);
+  
+  // 检测是否在GitHub Pages上
+  const isGitHubPages = window.location.hostname.includes('github.io');
 
   useEffect(() => {
+    // 如果在GitHub Pages上，不执行OBJ加载逻辑
+    if (isGitHubPages) return;
     if (!containerRef.current) return;
 
     console.log('Initializing OBJ model viewer');
@@ -272,7 +279,12 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
       renderer.dispose();
       controls.dispose();
     };
-  }, []);
+  }, [isGitHubPages]);
+
+  // 如果在GitHub Pages上，使用备用模型
+  if (isGitHubPages) {
+    return <FallbackModel className={className} />;
+  }
 
   return (
     <div className={`relative w-full h-full ${className}`}>

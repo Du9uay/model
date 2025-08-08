@@ -3,19 +3,9 @@
   "name": "极耳激光焊接教学平台",
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "any",
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
-    },
-    {
-      "src": "/logo192.png",
-      "type": "image/png",
-      "sizes": "any"
-    },
-    {
-      "src": "/logo512.png",
-      "type": "image/png",
-      "sizes": "any"
     }
   ],
   "start_url": ".",
