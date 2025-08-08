@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { LargeOBJLoader } from '../utils/LargeOBJLoader';
+import { getModelPath, handleModelLoadError } from '../utils/ModelLoader';
 
 interface OBJModelViewerProps {
   className?: string;
@@ -64,9 +65,10 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
     const mtlLoader = new MTLLoader();
     const objLoader = new LargeOBJLoader();
 
-    // 使用public文件夹中的文件
-    const mtlPath = '/Ux730415/JH-总装.mtl';
-    const objPath = '/Ux730415/JH-总装.obj';
+    // 获取模型路径
+    const modelPaths = getModelPath();
+    const mtlPath = modelPaths.mtl;
+    const objPath = modelPaths.obj;
 
     console.log('Loading MTL from:', mtlPath);
     console.log('Loading OBJ from:', objPath);
@@ -153,6 +155,7 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
           console.log('Model loaded and positioned successfully');
         } catch (err) {
           console.error('Error loading OBJ:', err);
+          handleModelLoadError(err);
           setError('OBJ文件加载失败');
           setLoading(false);
         }
@@ -234,7 +237,8 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
           setLoading(false);
         } catch (err) {
           console.error('Error loading OBJ without MTL:', err);
-          setError('无法加载3D模型');
+          handleModelLoadError(err);
+          setError('无法加载3D模型（GitHub Pages可能不支持大文件）');
           setLoading(false);
         }
       }

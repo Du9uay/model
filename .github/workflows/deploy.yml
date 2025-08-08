@@ -23,10 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          lfs: true  # 确保拉取LFS文件
-      
-      - name: Checkout LFS objects
-        run: git lfs checkout
+          lfs: false  # 暂时禁用LFS，避免带宽限制
       
       - name: Setup Node
         uses: actions/setup-node@v4
