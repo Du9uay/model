@@ -69,13 +69,22 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
     // Load model
     const loader = new GLTFLoader();
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('/draco/');
+    
+    // Configure paths for production/development
+    const basePath = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL || '' : '';
+    const dracoPath = basePath + '/draco/';
+    const fullModelPath = basePath + modelPath;
+    
+    dracoLoader.setDecoderPath(dracoPath);
     loader.setDRACOLoader(dracoLoader);
 
-    console.log('Loading model from:', modelPath);
+    console.log('Loading model from:', fullModelPath);
+    console.log('Draco path:', dracoPath);
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
     loader.load(
-      modelPath,
+      fullModelPath,
       (gltf) => {
         console.log('Model loaded successfully:', gltf);
         const model = gltf.scene;
@@ -112,7 +121,8 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
       },
       (error) => {
         console.error('Error loading model:', error);
-        setError('Failed to load 3D model');
+        console.error('Attempted to load from:', fullModelPath);
+        setError('Failed to load 3D model (404 - File not found)');
         setLoading(false);
       }
     );
@@ -127,8 +137,9 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
 
     // Cleanup
     return () => {
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
+      const container = mountRef.current;
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };
@@ -137,14 +148,16 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
   if (error) {
     return (
       <motion.div 
-        className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg"
+        className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg border border-red-500"
         style={{ width, height }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         <div className="text-red-400 text-center">
-          <div className="text-2xl mb-2">⚠️</div>
-          <div className="text-sm">{error}</div>
+          <div className="text-3xl mb-4">⚠️</div>
+          <div className="text-lg font-semibold mb-2">3D模型加载失败</div>
+          <div className="text-sm text-gray-300">{error}</div>
+          <div className="text-xs text-gray-500 mt-2">路径: {modelPath}</div>
         </div>
       </motion.div>
     );
@@ -153,7 +166,7 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
   if (loading) {
     return (
       <motion.div 
-        className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg"
+        className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg border border-blue-500"
         style={{ width, height }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -164,9 +177,9 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
-          <div className="text-sm">加载3D模型中...</div>
+          <div className="text-lg font-semibold mb-2">加载3D模型中...</div>
           {progress > 0 && (
-            <div className="text-xs text-gray-400 mt-2">{progress}%</div>
+            <div className="text-sm text-gray-400">{progress}%</div>
           )}
         </div>
       </motion.div>
@@ -176,7 +189,7 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
   return (
     <motion.div 
       ref={mountRef}
-      className="rounded-lg overflow-hidden shadow-2xl"
+      className="rounded-lg overflow-hidden shadow-2xl border border-gray-600"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
