@@ -5,12 +5,22 @@ export function getModelPath(): { obj: string; mtl: string } {
   const isVercel = hostname.includes('vercel.app') || hostname.includes('.vercel.app');
   const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
   
-  // Vercel环境可以直接加载大文件
-  if (isVercel || isLocalhost) {
-    console.log('Vercel/Local environment detected, loading full model');
+  // 本地环境使用本地文件
+  if (isLocalhost) {
+    console.log('Local environment detected, loading local model');
     return {
       obj: '/Ux730415/JH-总装.obj',
       mtl: '/Ux730415/JH-总装.mtl'
+    };
+  }
+  
+  // Vercel环境 - 由于Git LFS问题，需要使用CDN或Release URL
+  if (isVercel) {
+    console.log('Vercel environment detected, using GitHub raw content');
+    // 使用GitHub的raw内容URL（注意：这可能会有速率限制）
+    return {
+      obj: 'https://media.githubusercontent.com/media/Du9uay/model/master/public/Ux730415/JH-总装.obj',
+      mtl: 'https://raw.githubusercontent.com/Du9uay/model/master/public/Ux730415/JH-总装.mtl'
     };
   }
   
@@ -23,10 +33,10 @@ export function getModelPath(): { obj: string; mtl: string } {
     };
   }
   
-  // 默认路径
+  // 默认使用GitHub raw URL
   return {
-    obj: '/Ux730415/JH-总装.obj',
-    mtl: '/Ux730415/JH-总装.mtl'
+    obj: 'https://media.githubusercontent.com/media/Du9uay/model/master/public/Ux730415/JH-总装.obj',
+    mtl: 'https://raw.githubusercontent.com/Du9uay/model/master/public/Ux730415/JH-总装.mtl'
   };
 }
 

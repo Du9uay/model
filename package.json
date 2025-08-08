@@ -24,6 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "vercel-build": "git lfs pull && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "course:init": "node scripts/course-init.mjs",

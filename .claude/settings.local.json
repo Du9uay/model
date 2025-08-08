@@ -48,7 +48,8 @@
       "Bash(npm run build:*)",
       "Bash(git tag:*)",
       "Bash(gh release create:*)",
-      "Bash(vercel:*)"
+      "Bash(vercel:*)",
+      "Bash(gh auth:*)"
     ],
     "deny": []
   },

@@ -1,7 +1,8 @@
 {
-  "buildCommand": "CI=false npm run build",
+  "buildCommand": "CI=false npm run vercel-build",
   "outputDirectory": "build",
   "framework": "create-react-app",
+  "installCommand": "npm install && git lfs install",
   "rewrites": [
     {
       "source": "/(.*)",

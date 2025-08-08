@@ -72,6 +72,7 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
 
     // Load OBJ with MTL
     const mtlLoader = new MTLLoader();
+    mtlLoader.setCrossOrigin('anonymous');
     const objLoader = new LargeOBJLoader();
 
     // 获取模型路径
