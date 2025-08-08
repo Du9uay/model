@@ -1,0 +1,5 @@
+
+> plc-education-web@0.1.0 gate:approve
+> node scripts/gate-approve.mjs = 主流平台入驻策略与资质准备
+
+可用门禁: arch, theme, publish

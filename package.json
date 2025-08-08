@@ -1,0 +1,69 @@
+{
+  "name": "plc-education-web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://Du9uay.github.io/model",
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@types/node": "^16.18.68",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/three": "^0.178.1",
+    "framer-motion": "^12.19.2",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1",
+    "react-scripts": "5.0.1",
+    "three": "^0.179.1",
+    "three-stdlib": "^2.36.0",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "course:init": "node scripts/course-init.mjs",
+    "course:arch": "node scripts/course-arch.mjs",
+    "course:theme": "node scripts/course-theme.mjs",
+    "course:theme:fix": "node scripts/course-theme-fix.mjs",
+    "course:inject": "node scripts/course-inject.mjs",
+    "course:qa": "node scripts/course-qa.mjs",
+    "course:publish": "node scripts/course-publish.mjs",
+    "gate:approve": "node scripts/gate-approve.mjs",
+    "course:rollback": "node scripts/course-rollback.mjs",
+    "course:unlock": "node scripts/course-unlock.mjs",
+    "test:system": "node scripts/test-system.mjs",
+    "course:auto": "node scripts/course-auto.mjs",
+    "course:repair": "node scripts/course-repair.mjs"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.2",
+    "@types/react-beautiful-dnd": "^13.1.8",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6"
+  }
+}

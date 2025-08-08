@@ -1,0 +1,52 @@
+# EditorConfig 帮助开发者在不同编辑器和IDE之间保持一致的编码风格
+# editorconfig.org
+
+root = true
+
+# 所有文件的通用设置
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown文件
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# TypeScript和JavaScript文件
+[*.{ts,tsx,js,jsx,mjs}]
+indent_size = 2
+max_line_length = 100
+
+# JSON文件
+[*.json]
+indent_size = 2
+
+# YAML文件
+[*.{yml,yaml}]
+indent_size = 2
+
+# Makefile必须使用tab
+[Makefile]
+indent_style = tab
+
+# Python文件（如果有）
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+# Shell脚本
+[*.sh]
+indent_size = 2
+
+# CSS文件
+[*.{css,scss,sass}]
+indent_size = 2
+
+# HTML文件
+[*.html]
+indent_size = 2

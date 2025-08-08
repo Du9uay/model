@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp:*)",
+      "Bash(claude doctor)",
+      "Bash(claude --version)",
+      "Bash(claude config get:*)",
+      "Bash(ls:*)",
+      "Bash(export TERM=dumb)",
+      "Bash(claude update)",
+      "Bash(npm config:*)",
+      "Bash(npm install:*)",
+      "Bash(sudo ln:*)",
+      "Bash(echo $SHELL)",
+      "Bash(source:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(npm start)",
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "mcp__serena__activate_project",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__onboarding",
+      "mcp__serena__list_dir",
+      "mcp__serena__read_file",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__find_symbol",
+      "mcp__serena__execute_shell_command",
+      "mcp__serena__search_for_pattern",
+      "mcp__serena__think_about_collected_information",
+      "mcp__serena__write_memory",
+      "mcp__serena__think_about_whether_you_are_done",
+      "mcp__serena__create_text_file",
+      "mcp__serena__replace_regex"
+    ],
+    "deny": []
+  },
+  "disabledMcpjsonServers": [
+    "filesystem",
+    "github",
+    "memory"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "education-web-automation",
+  "displayName": "网页课件自动化生产系统",
+  "version": "2.0.0",
+  "description": "基于React的现代化教育网页生成系统，支持一键自动化生产",
+  "features": {
+    "oneClickAutomation": true,
+    "smartThemeSystem": true,
+    "responsiveDesign": true,
+    "intelligentRepair": true,
+    "qualityGates": true
+  },
+  "automation": {
+    "commandsBefore": 10,
+    "commandsAfter": 1,
+    "efficiencyImprovement": "90%"
+  },
+  "techStack": {
+    "frontend": ["React 18", "TypeScript", "Tailwind CSS"],
+    "animation": ["Framer Motion", "Three.js"],
+    "build": ["Create React App", "PostCSS"],
+    "automation": ["Node.js", "ES Modules", "Make"]
+  },
+  "compatibility": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0",
+    "browsers": [
+      "Chrome >= 90",
+      "Firefox >= 88",
+      "Safari >= 14",
+      "Edge >= 90"
+    ]
+  },
+  "directories": {
+    "source": "src",
+    "scripts": "scripts",
+    "courses": "courses",
+    "docs": "docs",
+    "build": "build",
+    "public": "public"
+  },
+  "maintainers": [
+    {
+      "role": "系统架构",
+      "focus": "自动化流程设计"
+    },
+    {
+      "role": "前端开发",
+      "focus": "React组件和UI设计"
+    }
+  ],
+  "lastUpdated": "2024-12-19",
+  "license": "MIT"
+}
