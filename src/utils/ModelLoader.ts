@@ -14,13 +14,18 @@ export function getModelPath(): { obj: string; mtl: string } {
     };
   }
   
-  // Vercel环境 - 由于Git LFS问题，需要使用CDN或Release URL
+  // Vercel环境 - 使用GitHub Release URL（更稳定，无跨域问题）
   if (isVercel) {
-    console.log('Vercel environment detected, using GitHub raw content');
-    // 使用GitHub的raw内容URL（注意：这可能会有速率限制）
+    console.log('Vercel environment detected, using GitHub Release files');
+    // 优先使用环境变量，否则使用默认的Release URL
+    const objUrl = process.env.REACT_APP_MODEL_OBJ_URL || 
+      'https://github.com/Du9uay/model/releases/download/v1.0.1/JH-总装.obj';
+    const mtlUrl = process.env.REACT_APP_MODEL_MTL_URL || 
+      'https://github.com/Du9uay/model/releases/download/v1.0.1/JH-总装.mtl';
+    
     return {
-      obj: 'https://media.githubusercontent.com/media/Du9uay/model/master/public/Ux730415/JH-总装.obj',
-      mtl: 'https://raw.githubusercontent.com/Du9uay/model/master/public/Ux730415/JH-总装.mtl'
+      obj: objUrl,
+      mtl: mtlUrl
     };
   }
   

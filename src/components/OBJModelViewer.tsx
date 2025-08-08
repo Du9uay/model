@@ -22,8 +22,9 @@ const OBJModelViewer: React.FC<OBJModelViewerProps> = ({ className = '' }) => {
   // 检测是否在Vercel上（支持大文件）
   const isVercel = window.location.hostname.includes('vercel.app');
   
-  // 在Vercel上也使用Fallback模型，因为跨域问题
-  const shouldUseFallback = isGitHubPages || isVercel;
+  // 只在GitHub Pages上使用Fallback模型
+  // Vercel可以通过GitHub Release加载真实模型
+  const shouldUseFallback = isGitHubPages;
 
   useEffect(() => {
     // 如果需要使用备用模型，不执行OBJ加载逻辑
