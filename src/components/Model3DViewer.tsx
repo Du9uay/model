@@ -1,11 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 import { motion } from 'framer-motion';
 
 interface Model3DViewerProps {
@@ -32,7 +29,6 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a0a0a);
-    scene.fog = new THREE.Fog(0x0a0a0a, 10, 100);
 
     // Camera setup
     const camera = new THREE.PerspectiveCamera(
@@ -42,7 +38,6 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
       1000
     );
     camera.position.set(5, 5, 5);
-    camera.lookAt(0, 0, 0);
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ 
@@ -50,415 +45,142 @@ const Model3DViewer: React.FC<Model3DViewerProps> = ({
       alpha: true 
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
-    renderer.shadowMap.enabled = false; // Disable shadows for performance
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     mountRef.current.appendChild(renderer.domElement);
-    
-    // Add environment for reflections
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    // Optimized lighting system - reduced for performance
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
     scene.add(ambientLight);
 
-    // Single optimized directional light
-    const mainLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    mainLight.position.set(5, 10, 5);
-    mainLight.castShadow = false; // Disable shadows for performance
-    scene.add(mainLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(10, 10, 5);
+    directionalLight.castShadow = true;
+    scene.add(directionalLight);
 
-    // Controls setup - Enhanced for free movement
+    // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.08; // Smooth movement
-    controls.screenSpacePanning = true; // Allow panning
-    controls.enablePan = true; // Enable panning
-    controls.enableZoom = true; // Enable zooming
-    controls.enableRotate = true; // Enable rotation
-    
-    // Distance limits
-    controls.minDistance = 1; // Allow closer view
-    controls.maxDistance = 50; // Allow further view
-    
-    // No rotation limits - full 360 degree freedom
-    controls.minPolarAngle = 0; // Allow looking from any angle
-    controls.maxPolarAngle = Math.PI; // Full vertical rotation
-    controls.minAzimuthAngle = -Infinity; // No horizontal limits
-    controls.maxAzimuthAngle = Infinity;
-    
-    // Pan limits (optional - can be removed for unlimited panning)
-    controls.panSpeed = 1.0;
-    controls.rotateSpeed = 1.0;
-    controls.zoomSpeed = 1.0;
-    
-    // Auto rotation settings
+    controls.dampingFactor = 0.05;
     controls.autoRotate = autoRotate;
-    controls.autoRotateSpeed = 0.5;
-    
-    // Mouse/touch settings
-    controls.mouseButtons = {
-      LEFT: THREE.MOUSE.ROTATE,
-      MIDDLE: THREE.MOUSE.DOLLY,
-      RIGHT: THREE.MOUSE.PAN
-    };
-    
-    // Touch settings for mobile
-    controls.touches = {
-      ONE: THREE.TOUCH.ROTATE,
-      TWO: THREE.TOUCH.DOLLY_PAN
-    };
+    controls.autoRotateSpeed = 2;
 
-    // Grid helper - removed for cleaner look
-    // const gridHelper = new THREE.GridHelper(10, 10, 0x333333, 0x222222);
-    // scene.add(gridHelper);
-
-    // Setup loaders
-    const objLoader = new OBJLoader();
-    const mtlLoader = new MTLLoader();
-    const gltfLoader = new GLTFLoader();
+    // Load model
+    const loader = new GLTFLoader();
     const dracoLoader = new DRACOLoader();
-    let model: THREE.Group | null = null;
-    
-    // Optimize OBJ loader for performance
-    // Note: OBJ loader automatically parses vertex colors when present
-    
-    // Configure Draco loader
     dracoLoader.setDecoderPath('/draco/');
-    dracoLoader.setDecoderConfig({ type: 'js' });
-    gltfLoader.setDRACOLoader(dracoLoader);
-    
-    // Try to load compressed GLB first, fallback to OBJ
-    const compressedPath = modelPath.replace('.obj', '-compressed.glb');
-    const glbPath = modelPath.replace('.obj', '.glb');
-    
-    // Model processing function
-    const processModel = (object: THREE.Group) => {
-      model = object;
-      console.log('Model structure:', object);
-      
-      // Fix model orientation - flip if upside down
-      object.rotation.x = Math.PI; // Rotate 180 degrees around X axis
-      
-      // Calculate bounding box to center the model
-      const box = new THREE.Box3().setFromObject(object);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-      console.log('Model size:', size);
-      console.log('Model center:', center);
+    loader.setDRACOLoader(dracoLoader);
 
-      // Center the model
-      object.position.x = -center.x;
-      object.position.y = -center.y;
-      object.position.z = -center.z;
+    console.log('Loading model from:', modelPath);
 
-      // Scale the model to fit the view
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = maxDim > 0 ? 5 / maxDim : 1; // Increased scale
-      object.scale.setScalar(scale);
-      
-      console.log('Applied scale:', scale);
-
-      // Process meshes with optimized materials
-      let meshCount = 0;
-      let totalVertices = 0;
-      let hasVertexColors = false;
-      
-      object.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          meshCount++;
-          const geometry = child.geometry;
-          
-          // Count vertices
-          const vertexCount = geometry.attributes.position ? geometry.attributes.position.count : 0;
-          totalVertices += vertexCount;
-          
-          // Check for vertex colors
-          if (geometry.attributes.color) {
-            hasVertexColors = true;
-            console.log('Found vertex colors in GLB model');
-          }
-          
-          // Optimize geometry for performance
-          geometry.computeBoundingSphere();
-          
-          // Reduce geometry complexity if too many vertices
-          if (vertexCount > 50000) {
-            console.log(`High vertex count (${vertexCount}), applying geometry optimization`);
-            // Compute vertex normals for smooth shading (mergeVertices is deprecated)
-            if (!geometry.attributes.normal) {
-              geometry.computeVertexNormals();
-            }
-            // Enable efficient rendering for high-poly models
-            geometry.computeBoundingBox();
-          }
-          
-          // Apply material based on whether we have vertex colors
-          let material: THREE.Material;
-          
-          if (child.material && Array.isArray(child.material)) {
-            // Handle multiple materials
-            material = child.material[0];
-          } else if (child.material) {
-            // Use existing material from GLB if available
-            material = child.material as THREE.Material;
-            
-            // Enhance existing material with OBJ original color if it's too plain
-            if (material instanceof THREE.MeshStandardMaterial || material instanceof THREE.MeshBasicMaterial) {
-              const currentColor = material.color.getHex();
-              if (currentColor === 0xffffff || currentColor === 0x000000) {
-                // Apply OBJ original gray color
-                const originalGray = new THREE.Color(0.752941, 0.752941, 0.752941);
-                material.color = originalGray;
-              }
-              
-              // Convert to StandardMaterial if it's BasicMaterial for better lighting
-              if (material instanceof THREE.MeshBasicMaterial) {
-                const newMaterial = new THREE.MeshStandardMaterial({
-                  color: material.color,
-                  metalness: 0.2,
-                  roughness: 0.6,
-                  side: material.side,
-                  transparent: material.transparent,
-                  opacity: material.opacity
-                });
-                material = newMaterial;
-              } else {
-                material.metalness = 0.2;
-                material.roughness = 0.6;
-              }
-            }
-          } else {
-            // Create material optimized for vertex colors
-            if (geometry.attributes.color) {
-              // Use vertex colors from OBJ file
-              material = new THREE.MeshStandardMaterial({
-                vertexColors: true,
-                metalness: 0.1,
-                roughness: 0.7,
-                side: THREE.FrontSide
-              });
-              console.log('Applied vertex color material to mesh');
-            } else {
-              // Fallback material
-              material = new THREE.MeshStandardMaterial({
-                color: 0xcccccc,
-                metalness: 0.1,
-                roughness: 0.7,
-                side: THREE.FrontSide
-              });
-            }
-          }
-          
-          child.material = material;
-          child.castShadow = false; // Disable shadow casting for performance
-          child.receiveShadow = false; // Disable shadow receiving for performance
-          child.frustumCulled = true; // Enable frustum culling
-          
-          // Additional performance optimizations
-          child.matrixAutoUpdate = false; // Disable automatic matrix updates
-          child.updateMatrix(); // Update matrix once
+    loader.load(
+      modelPath,
+      (gltf) => {
+        console.log('Model loaded successfully:', gltf);
+        const model = gltf.scene;
+        
+        // Calculate bounding box and center the model
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        
+        // Center the model
+        model.position.x = -center.x;
+        model.position.y = -center.y;
+        model.position.z = -center.z;
+        
+        // Scale to fit view
+        const maxDim = Math.max(size.x, size.y, size.z);
+        if (maxDim > 0) {
+          const scale = 3 / maxDim;
+          model.scale.setScalar(scale);
         }
-      });
-      
-      console.log(`Model loaded - Meshes: ${meshCount}, Vertices: ${totalVertices}, Has vertex colors: ${hasVertexColors}`);
-      
-      scene.add(object);
-      setLoading(false);
-    };
-    
-    // Function to load GLB/GLTF with Draco compression
-    const loadGLTF = (path: string) => {
-      console.log('Loading compressed GLB from:', path);
-      gltfLoader.load(
-        path,
-        (gltf) => {
-          console.log('GLB loaded successfully:', gltf);
-          const object = gltf.scene;
-          processModel(object);
-        },
-        (xhr) => {
+        
+        scene.add(model);
+        setLoading(false);
+        setError(null);
+        
+        // Update camera position
+        camera.lookAt(0, 0, 0);
+      },
+      (xhr) => {
+        if (xhr.lengthComputable) {
           const percentComplete = (xhr.loaded / xhr.total) * 100;
           setProgress(Math.round(percentComplete));
-        },
-        (error) => {
-          console.error('Error loading GLB:', error);
-          setError('Failed to load 3D model - all formats failed');
-          setLoading(false);
         }
-      );
-    };
-    
-    // Function to load OBJ with or without materials
-    const loadOBJ = (materials?: MTLLoader.MaterialCreator) => {
-      console.log('Loading OBJ from path:', modelPath);
-      
-      if (materials) {
-        materials.preload();
-        objLoader.setMaterials(materials);
+      },
+      (error) => {
+        console.error('Error loading model:', error);
+        setError('Failed to load 3D model');
+        setLoading(false);
       }
-      
-      objLoader.load(
-        modelPath,
-        (object) => {
-          console.log('OBJ loaded successfully:', object);
-          if (object.children.length === 0) {
-            console.error('OBJ file loaded but contains no geometry');
-            setError('Model file is empty');
-            setLoading(false);
-            return;
-          }
-          processModel(object);
-        },
-        (xhr) => {
-          // Progress callback
-          if (xhr.lengthComputable) {
-            const percentComplete = (xhr.loaded / xhr.total) * 100;
-            setProgress(Math.round(percentComplete));
-            console.log(`Loading progress: ${Math.round(percentComplete)}%`);
-          }
-        },
-        (error) => {
-          // Error callback
-          console.error('Error loading OBJ model:', error);
-          console.error('Model path:', modelPath);
-          console.log('Attempting to load compressed GLB as fallback...');
-          
-          // Try loading compressed GLB as fallback
-          const compressedPath = modelPath.replace('.obj', '-compressed.glb');
-          loadGLTF(compressedPath);
-        }
-      );
-    };
+    );
 
-    // Load OBJ directly to preserve vertex colors (GLB conversion loses color information)
-    console.log('Loading OBJ file to preserve vertex colors from:', modelPath);
-    console.log('Full URL:', window.location.origin + modelPath);
-    
-    // Test if file exists first
-    fetch(modelPath, { method: 'HEAD' })
-      .then(response => {
-        console.log('File access test:', response.status, response.statusText);
-        console.log('Content-Type:', response.headers.get('content-type'));
-        if (response.ok) {
-          loadOBJ();
-        } else {
-          setError(`Model file not accessible (${response.status})`);
-          setLoading(false);
-        }
-      })
-      .catch(error => {
-        console.error('File access test failed:', error);
-        // Try loading anyway in case it's a CORS issue
-        loadOBJ();
-      });
-
-    // Optimized animation loop with adaptive framerate
-    let needsUpdate = true;
-    let lastFrameTime = 0;
-    const targetFPS = 30; // Cap at 30 FPS for performance
-    const frameInterval = 1000 / targetFPS;
-    
-    controls.addEventListener('change', () => {
-      needsUpdate = true;
-    });
-    
-    const animate = (currentTime: number) => {
+    // Animation loop
+    const animate = () => {
       requestAnimationFrame(animate);
-      
-      // Throttle rendering to target FPS
-      if (currentTime - lastFrameTime < frameInterval) {
-        return;
-      }
-      lastFrameTime = currentTime;
-      
-      // Only update controls if needed
-      if (controls.enableDamping || controls.autoRotate) {
-        controls.update();
-        needsUpdate = true;
-      }
-
-      // Simplified rotation animation
-      if (model && autoRotate && !controls.autoRotate) {
-        model.rotation.y += 0.005; // Constant rotation speed
-        needsUpdate = true;
-      }
-      
-      // Only render if something changed
-      if (needsUpdate) {
-        renderer.render(scene, camera);
-        needsUpdate = false;
-      }
+      controls.update();
+      renderer.render(scene, camera);
     };
-    animate(0);
-
-    // Handle window resize
-    const handleResize = () => {
-      if (!mountRef.current) return;
-      const newWidth = mountRef.current.clientWidth;
-      const newHeight = mountRef.current.clientHeight;
-      
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
-    };
-    window.addEventListener('resize', handleResize);
+    animate();
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
-      const currentMount = mountRef.current;
-      if (currentMount && renderer.domElement) {
-        currentMount.removeChild(renderer.domElement);
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
-      controls.dispose();
     };
   }, [modelPath, width, height, autoRotate]);
 
+  if (error) {
+    return (
+      <motion.div 
+        className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg"
+        style={{ width, height }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="text-red-400 text-center">
+          <div className="text-2xl mb-2">⚠️</div>
+          <div className="text-sm">{error}</div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <motion.div 
+        className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg"
+        style={{ width, height }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="text-center text-light">
+          <motion.div 
+            className="w-16 h-16 border-4 border-t-transparent border-blue-500 rounded-full mb-4"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+          <div className="text-sm">加载3D模型中...</div>
+          {progress > 0 && (
+            <div className="text-xs text-gray-400 mt-2">{progress}%</div>
+          )}
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
-    <motion.div
+    <motion.div 
+      ref={mountRef}
+      className="rounded-lg overflow-hidden shadow-2xl"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="relative bg-deep rounded-2xl overflow-hidden shadow-glow"
-      style={{ width, height }}
-    >
-      <div ref={mountRef} className="w-full h-full" />
-      
-      {loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-deep backdrop-blur-sm">
-          <div className="text-light mb-4">Loading 3D Model with Colors...</div>
-          <div className="w-48 h-2 bg-mid rounded-full overflow-hidden">
-            <motion.div
-              className="h-full gradient-accent"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-          <div className="surf-200 text-sm mt-2">{progress}% - Preserving vertex colors</div>
-        </div>
-      )}
-      
-      {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-deep backdrop-blur-sm">
-          <div className="coral text-center">
-            <div className="mb-2">⚠️</div>
-            <div>{error}</div>
-          </div>
-        </div>
-      )}
-
-      {!loading && !error && (
-        <div className="absolute bottom-4 left-4 surf-200 text-xs space-y-1">
-          <div>🖱️ 左键：旋转 • 滚轮：缩放 • 右键：平移</div>
-          <div>📱 触屏：单指旋转 • 双指缩放平移</div>
-        </div>
-      )}
-    </motion.div>
+    />
   );
 };
 

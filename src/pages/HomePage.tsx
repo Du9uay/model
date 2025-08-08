@@ -190,7 +190,7 @@ const HomePage: React.FC = () => {
               <span className="gradient-text-accent">增材制造实物展示</span>
             </motion.h3>
             <Model3DViewer
-              modelPath="/models/JH-总装.obj"
+              modelPath="/models/JH-总装-compressed.glb"
               width={window.innerWidth > 768 ? 800 : window.innerWidth - 40}
               height={window.innerWidth > 768 ? 500 : 300}
               autoRotate={true}
