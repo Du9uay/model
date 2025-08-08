@@ -7,7 +7,7 @@ import Model3DViewer from '../components/Model3DViewer';
 const HomePage: React.FC = () => {
   const [displayText, setDisplayText] = useState('');
   const [textIndex, setTextIndex] = useState(0);
-  const fullText = '主流平台入驻策略与资质准备';
+  const fullText = '极耳激光焊接技术教学平台';
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref);
@@ -34,40 +34,40 @@ const HomePage: React.FC = () => {
 
   const courseModules = [
     {
-      title: '一. 国内主流平台概览与选择策略',
-      description: '全面介绍淘宝、抖音、拼多多等主流平台，让学生知晓各平台的定位、用户群体，学会依据业务类型选择适配平台，掌握查询入驻资质要求的技能。',
+      title: '一. 极耳激光焊接技术原理',
+      description: '深入学习激光焊接的物理原理，了解激光功率、焊接速度、光斑直径等关键参数对焊接质量的影响，掌握激光焊接的工艺特点。',
       icon: BookOpen,
       path: '/',
       color: 'gradient-accent',
       delay: 0.1
     },
     {
-      title: '二. 店铺类型与经营品类匹配规则',
-      description: '聚焦主流平台店铺类型与经营品类的匹配规则，学习如何选定合适店铺类型，掌握不同经营品类的资质要求，提升入驻的有效性与专业性。',
+      title: '二. 极耳焊接设备构成与操作',
+      description: '详细介绍极耳激光焊接设备的各个组成部分，包括激光器、光学系统、工作台、控制系统等，学习设备的正确操作流程。',
       icon: Settings,
       path: '/',
       color: 'gradient-secondary',
       delay: 0.2
     },
     {
-      title: '三. 平台入驻流程讲解',
-      description: '详细讲解主流平台入驻的全流程，从准备营业执照、资质证明等材料，到填写入驻表单、与平台沟通，让学生掌握平台入驻的实操技能。',
+      title: '三. 焊接工艺参数优化',
+      description: '学习如何根据不同的极耳材料和厚度，合理设置激光功率、焊接速度、离焦量等工艺参数，获得最佳的焊接效果。',
       icon: Monitor,
       path: '/',
       color: 'gradient-secondary',
       delay: 0.3
     },
     {
-      title: '四. 核心资质与费用明细',
-      description: '学习识别不同平台所需的核心资质，如营业执照、行业许可证等，了解各平台的入驻费用构成，掌握资质准备及费用把控的实用技能。',
+      title: '四. 焊接质量检测与控制',
+      description: '掌握极耳焊接质量的检测方法，包括外观检查、强度测试、导电性能检测等，学习质量问题的分析与改进措施。',
       icon: Network,
       path: '/',
       color: 'gradient-accent',
       delay: 0.4
     },
     {
-      title: '五. 入驻案例分析',
-      description: '通过真实案例分析不同类型商家的入驻策略，展示成功和失败案例，帮助学生理解如何根据自身情况制定合适的平台入驻方案。',
+      title: '五. 实际案例与故障处理',
+      description: '通过真实的生产案例学习极耳焊接的实际应用，分析常见的焊接缺陷及其成因，掌握故障诊断与处理技能。',
       icon: Zap,
       path: '/',
       color: 'gradient-accent',
@@ -157,7 +157,7 @@ const HomePage: React.FC = () => {
               transition={{ delay: 2, duration: 0.8 }}
               data-slot="home.hero.subtitle"
             >
-              3D打印技术核心教学
+              极耳激光焊接工艺与设备
             </motion.span>
           </motion.h1>
           
@@ -168,8 +168,8 @@ const HomePage: React.FC = () => {
             transition={{ delay: 2.5, duration: 1 }}
             data-slot="home.hero.desc"
           >
-            通过系统性学习增材制造技术基础，掌握3D打印工艺、软件应用和后处理技术，
-            培养具备增材制造全流程设计、制造和质量控制能力的技术人才。
+            通过系统性学习激光焊接技术原理，掌握极耳焊接工艺、设备操作和质量控制技术，
+            培养具备动力电池极耳焊接全流程设计、制造和质量控制能力的专业技术人才。
           </motion.p>
         </motion.div>
 
@@ -187,7 +187,7 @@ const HomePage: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 3.2, duration: 0.6 }}
             >
-              <span className="gradient-text-accent">增材制造实物展示</span>
+              <span className="gradient-text-accent">极耳激光焊接设备展示</span>
             </motion.h3>
             <Model3DViewer
               modelPath="/models/JH-总装-compressed.glb"
@@ -201,7 +201,7 @@ const HomePage: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 3.5, duration: 0.6 }}
             >
-              这是一个通过增材制造技术生产的精密部件示例，展示了3D打印在复杂结构制造中的优势
+              这是极耳激光焊接设备的3D展示模型，展示了激光焊接技术在动力电池制造中的关键作用
             </motion.p>
           </div>
         </motion.div>
@@ -216,9 +216,9 @@ const HomePage: React.FC = () => {
           data-slot="home.features"
         >
           {[
-            { icon: Target, title: '实用性强', desc: '紧密结合电商平台实际运营需求，从平台选择到入驻执行，培养学员快速落地的实操能力。', color: 'gradient-accent' },
-            { icon: Users, title: '系统完整', desc: '涵盖主流电商平台入驻的各个环节，从平台选择到费用管理，构建完整的入驻知识体系。', color: 'gradient-secondary' },
-            { icon: Award, title: '就业导向', desc: '课程内容与岗位需求紧密对应，助力学员在增材制造领域实现职业发展。', color: 'gradient-accent' }
+            { icon: Target, title: '实用性强', desc: '紧密结合动力电池制造实际需求，从设备操作到工艺优化，培养学员快速上岗的实操能力。', color: 'gradient-accent' },
+            { icon: Users, title: '系统完整', desc: '涵盖极耳激光焊接的各个环节，从设备认知到质量控制，构建完整的焊接技术知识体系。', color: 'gradient-secondary' },
+            { icon: Award, title: '就业导向', desc: '课程内容与岗位需求紧密对应，助力学员在新能源电池制造领域实现职业发展。', color: 'gradient-accent' }
           ].map((feature, index) => {
             const Icon = feature.icon;
             return (
@@ -265,7 +265,7 @@ const HomePage: React.FC = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             viewport={{ once: true }}
           >
-            开始您的3D打印学习之旅
+            开始您的极耳激光焊接学习之旅
           </motion.h2>
           
           <motion.p 
@@ -275,7 +275,7 @@ const HomePage: React.FC = () => {
             transition={{ delay: 0.5, duration: 0.6 }}
             viewport={{ once: true }}
           >
-            掌握未来制造技术，开启职业新篇章
+            掌握激光焊接技术，开启新能源职业新篇章
           </motion.p>
           
           <motion.div
