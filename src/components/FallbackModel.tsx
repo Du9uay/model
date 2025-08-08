@@ -170,9 +170,13 @@ const FallbackModel: React.FC<FallbackModelProps> = ({ className = '' }) => {
         <div>极耳激光焊接设备 - 示意模型</div>
         <div className="text-xs mt-1">鼠标左键: 旋转 | 鼠标右键: 平移 | 滚轮: 缩放</div>
       </div>
-      <div className="absolute top-4 left-4 bg-yellow-600/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs text-white">
-        <div className="font-semibold">⚠️ 简化模型</div>
-        <div className="mt-1">完整模型请克隆仓库到本地查看</div>
+      <div className="absolute top-4 left-4 bg-blue-600/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs text-white">
+        <div className="font-semibold">💡 演示模型</div>
+        <div className="mt-1">这是极耳激光焊接设备的简化演示</div>
+        <div className="mt-1">完整251MB模型请在本地运行查看</div>
+        <div className="mt-2 text-xs opacity-80">
+          克隆仓库: git clone https://github.com/Du9uay/model.git
+        </div>
       </div>
     </div>
   );
