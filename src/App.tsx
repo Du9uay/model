@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage';
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <ScrollToTop />
       <div className="min-h-screen text-light">
         <div className="container mx-auto px-4">
