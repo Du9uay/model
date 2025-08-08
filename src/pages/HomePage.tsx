@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useAnimation, useInView, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, BookOpen, Users, Award, Target, Settings, Network, Cpu, Zap, Monitor } from '../components/Icons';
-import Model3DViewer from '../components/Model3DViewer';
+import OBJModelViewer from '../components/OBJModelViewer';
 
 const HomePage: React.FC = () => {
   const [displayText, setDisplayText] = useState('');
@@ -189,12 +189,9 @@ const HomePage: React.FC = () => {
             >
               <span className="gradient-text-accent">极耳激光焊接设备展示</span>
             </motion.h3>
-            <Model3DViewer
-              modelPath="/models/JH-总装-compressed.glb"
-              width={window.innerWidth > 768 ? 800 : window.innerWidth - 40}
-              height={window.innerWidth > 768 ? 500 : 300}
-              autoRotate={true}
-            />
+            <div className="w-full" style={{ height: window.innerWidth > 768 ? '500px' : '300px' }}>
+              <OBJModelViewer />
+            </div>
             <motion.p
               className="surf-200 mt-4 max-w-2xl mx-auto"
               initial={{ opacity: 0 }}
