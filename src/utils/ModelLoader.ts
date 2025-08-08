@@ -18,10 +18,11 @@ export function getModelPath(): { obj: string; mtl: string } {
   if (isVercel) {
     console.log('Vercel environment detected, using GitHub Release files');
     // 优先使用环境变量，否则使用默认的Release URL
+    // 注意：实际上传的文件名是 JH-.obj 和 JH-.mtl
     const objUrl = process.env.REACT_APP_MODEL_OBJ_URL || 
-      'https://github.com/Du9uay/model/releases/download/v1.0.1/JH-总装.obj';
+      'https://github.com/Du9uay/model/releases/download/v1.0.1/JH-.obj';
     const mtlUrl = process.env.REACT_APP_MODEL_MTL_URL || 
-      'https://github.com/Du9uay/model/releases/download/v1.0.1/JH-总装.mtl';
+      'https://github.com/Du9uay/model/releases/download/v1.0.1/JH-.mtl';
     
     return {
       obj: objUrl,
